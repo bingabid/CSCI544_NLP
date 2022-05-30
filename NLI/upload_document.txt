@@ -1,0 +1,44 @@
+Complete this document and upload along with your prediction results and your code.
+
+### Method Name ###
+Use a phrasal name to describe your method, e.g. training a BiLSTM cross-encoder from scratch, fine-tuning RoBERTa-large-MNLI, etc.
+    cross-encoder/nli-deberta-v3-large with augmented data set
+    (reference document: https://huggingface.co/cross-encoder/nli-deberta-v3-large
+    reference code: https://towardsdatascience.com/fine-tuning-pre-trained-transformer-models-for-sentence-entailment-d87caf9ec9db)
+    I took inspiration from above website and blogs. Engine of the code is designed purely based on above documentation.
+
+
+### Sentence pair encoder ###
+Use up to 5 sentences to describe your encoder for the sentence pairs. Need to mention the following:
+- Is it a bi-encoder or cross-encoder?
+    cross-encoder
+- What type of encoder (LSTM, Transformer, etc.)
+    Transformers
+- Is it based on a pre-trained model (BERT-large? RoBERTa-large-SNLI? BART-large-MNLI?) or completely trained from scratch by yourself (then how do you chracterize the words and aggregate them into sentence representations)?
+    It is based on pre-trained deberta-v3-large available on hugging face. Used AutoTokenizer from transformer.
+### Training & Development ###
+Up to 5 sentences: how did you evaluate your solution using the dev set before submitting to the leaderboard? What are some key hyperparameter values (e.g., optimizer, learning rate, batch size, etc.)? How did you terminate the training (using a fixed #epochs, early stopping based on dev set performance)?
+    Used validation set available to select a suitable model from available models in hugging face and then fine tune the hyperparameter. 
+    Initially the accuracy was only upto 84% then gradually improved the accuracy to more than 90%
+    To avoid overfitting increased the training data using random augmentation and back-translation from multiple language like spanish, french, arabic.
+    Tested the multiple back-transalation and  other augmentation.
+### Other methods ###
+Did you try other methods than the submitted one?
+    I tried multiple model:
+        cross-encoder/nli-deberta-v3-large
+        cross-encoder/nli-berta-base
+        cross-encoder/nli-berta-large
+        cross-encoder/nli-distilberta-base 
+
+### Packages ###
+List the key python packages you have used in this assignment.
+    import torch
+    import pandas as pd
+    from torch.nn.utils.rnn import pad_sequence
+    from torch.utils.data import Dataset, TensorDataset, DataLoader
+    from transformers import AutoTokenizer, AutoModelForSequenceClassification, AdamW
+
+    import nlpaug
+    import transformers
+    import sentencepiece
+    import nlpaug.augmenter.word as naw
